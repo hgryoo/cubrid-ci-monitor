@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>gha-ci 러너 큐</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='20' width='84' height='22' rx='8' fill='%233b82f6'/><rect x='8' y='58' width='52' height='22' rx='8' fill='%23f59e0b'/></svg>">
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><i></i><i></i></div>
+        <div>
+          <h1>gha-ci 러너 큐</h1>
+          <p>CUBRID/cubrid · <code>gha-ci.yml</code> · self-hosted 러너 레인</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="보기 범위">
+          <button id="f-all" aria-pressed="true">전체</button>
+          <button id="f-mine" aria-pressed="false">내 PR <span id="me" class="me"></span></button>
+        </div>
+        <span class="updated" id="updated-wrap">갱신 <b id="updated">—</b></span>
+        <select id="auto" title="자동 새로고침" aria-label="자동 새로고침">
+          <option value="0">자동 OFF</option>
+          <option value="30">30초</option>
+          <option value="60" selected>1분</option>
+          <option value="300">5분</option>
+          <option value="600">10분</option>
+        </select>
+        <button class="icon" id="theme" title="테마 전환" aria-label="테마 전환"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+        <button class="primary" id="refresh"><span class="ico" aria-hidden="true">↻</span> 새로고침</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="error"></div>
+
+    <section class="lanes" id="lanes" aria-label="러너 레인">
+      <div class="lane skeleton"></div><div class="lane skeleton"></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="dot run"></span><h2>진행 중</h2><span class="count" id="c-running"></span>
+        <span class="hint">러너에서 잡이 돌고 있는 런</span>
+      </div>
+      <div id="running" class="dimmable"><div class="card skeleton"></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="dot wait"></span><h2>대기</h2><span class="count" id="c-waiting"></span>
+        <span class="hint">러너가 비면 먼저 줄 선 잡부터 시작한다 (FIFO 가정)</span>
+      </div>
+      <div id="waiting" class="dimmable"><div class="card skeleton"></div></div>
+    </section>
+
+    <section id="mine-sec" hidden>
+      <div class="sec-head">
+        <span class="dot mine"></span><h2>내 PR 판정</h2><span class="count" id="c-mine"></span>
+        <span class="hint">열린 PR의 head 커밋에 붙은 gha-ci status — 브랜치 보호 규칙이 보는 값</span>
+      </div>
+      <div id="mine"><div class="empty">불러오는 중…</div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="dot done"></span><h2>최근 완료</h2><span class="count" id="c-recent"></span>
+        <span class="hint" id="recent-hint">지난 24시간</span>
+        <div class="seg small push-right" role="group" aria-label="최근 완료 필터">
+          <button id="r-all" aria-pressed="true">전체</button>
+          <button id="r-fail" aria-pressed="false">실패만</button>
+        </div>
+      </div>
+      <div id="recent-sum" class="sum"></div>
+      <div id="recent"><div class="empty">불러오는 중… (처음에는 30초쯤 걸린다)</div></div>
+    </section>
+
+    <footer id="footer"></footer>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
